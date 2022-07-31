@@ -16,11 +16,11 @@
     </modules>
 
     <!--
-        1. 聚合工程里可以分为顶级项目（顶级工程、父工程）与子工程，这两者的关系其实就是父子继承的关系
-        子工程在maven里称之为模块（module），模块之间是平级，是可以相互依赖的。
-        2. 子模块可以使用顶级工程里所有的资源（依赖），子模块之间如果要使用资源，必须构建依赖（构建关系）
-        3. 一个顶级工程是可以由多个不同的子工程共同组合而成。
-    -->
+         1. 聚合工程里可以分为顶级项目（顶级工程、父工程）与子工程，这两者的关系其实就是父子继承的关系
+         子工程在maven里称之为模块（module），模块之间是平级，是可以相互依赖的。
+         2. 子模块可以使用顶级工程里所有的资源（依赖），子模块之间如果要使用资源，必须构建依赖（构建关系）
+         3. 一个顶级工程是可以由多个不同的子工程共同组合而成。
+     -->
 
     <packaging>pom</packaging>
 
@@ -53,12 +53,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <!-- 打包war [2] 移除自带内置tomcat -->
-            <exclusions>
-                <exclusion>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                    <groupId>org.springframework.boot</groupId>
-                </exclusion>
-            </exclusions>
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <artifactId>spring-boot-starter-tomcat</artifactId>-->
+<!--                    <groupId>org.springframework.boot</groupId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -74,7 +74,8 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.41</version>
+<!--            <version>5.1.41</version>-->
+            <version>8.0.15</version>
         </dependency>
         <!-- mybatis -->
         <dependency>
