@@ -1,5 +1,7 @@
 package org.feather.food.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.feather.food.bo.UserBO;
 import org.feather.food.common.utils.JSONResult;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @version: 1.0
  */
 //@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@Api(value = "注册登录",tags = {"注册登录接口"})
 @RequestMapping("/passport")
 @RestController
 public class PassPortController {
@@ -25,6 +28,7 @@ public class PassPortController {
     @Autowired
     private  UserService userService;
 
+    @ApiOperation(value = "用户名是否存在",notes = "用户名是否存在",httpMethod = "GET")
     @GetMapping("/usernameIsExist")
     public JSONResult userNameIsExist(@RequestParam String username){
         if (StringUtils.isBlank(username)){
@@ -37,7 +41,7 @@ public class PassPortController {
         return JSONResult.ok();
     }
 
-
+    @ApiOperation(value = "用户注册",notes = "用户注册",httpMethod = "POST")
     @PostMapping("/regist")
     public  JSONResult regist(@RequestBody UserBO userBO){
         String username = userBO.getUsername();

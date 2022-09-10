@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @projectName: food
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since: 2022/7/31 20:37
  * @version: 1.0
  */
+@ApiIgnore
 @RequestMapping("/stu")
 @RestController
 public class StuController  {
