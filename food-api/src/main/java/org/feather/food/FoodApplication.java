@@ -18,6 +18,8 @@ import tk.mybatis.spring.annotation.MapperScan;
 // 扫描 mybatis 通用 mapper 所在的包
 @MapperScan(basePackages = "org.feather.food.mapper")
 //@EnableTransactionManagement
+//扫描所有包以及相关组件
+@ComponentScan(basePackages = {"org.feather","org.n3r.idworker"})
 @EnableScheduling       // 开启定时任务
 public class FoodApplication {
     public static void main(String[] args) {
