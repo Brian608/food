@@ -100,5 +100,16 @@ public class PassPortController {
         return users;
     }
 
+    @ApiOperation(value = "退出登录",notes = "退出登录",httpMethod = "POST")
+    @PostMapping("/logout")
+    public  JSONResult logout(@RequestParam String userId, HttpServletRequest request , HttpServletResponse response){
+      CookieUtils.deleteCookie(request ,response,"user");
+      //todo 用户退出登录，需要清楚购物车
+        //todo 分布式会话中需要清除用户数据
+        return JSONResult.ok();
+
+    }
+
+
 
 }
