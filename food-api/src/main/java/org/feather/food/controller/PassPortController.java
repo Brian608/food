@@ -4,12 +4,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.feather.food.bo.UserBO;
+import org.feather.food.common.utils.CookieUtils;
 import org.feather.food.common.utils.JSONResult;
+import org.feather.food.common.utils.JsonUtils;
 import org.feather.food.common.utils.MD5Utils;
 import org.feather.food.pojo.Users;
 import org.feather.food.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @projectName: food
@@ -44,7 +49,7 @@ public class PassPortController {
 
     @ApiOperation(value = "用户注册",notes = "用户注册",httpMethod = "POST")
     @PostMapping("/regist")
-    public  JSONResult regist(@RequestBody UserBO userBO){
+    public  JSONResult regist(@RequestBody UserBO userBO,HttpServletRequest request , HttpServletResponse response){
         String username = userBO.getUsername();
         String password = userBO.getPassword();
         String confirmPassWord = userBO.getConfirmPassWord();
@@ -62,12 +67,14 @@ public class PassPortController {
             return  JSONResult.errorMsg("两次密码不一致");
         }
         Users user = userService.createUser(userBO);
+        user=setNullProperty(user);
+        CookieUtils.setCookie(request,response,"user", JsonUtils.objectToJson(user),true);
         return JSONResult.ok(user);
 
     }
     @ApiOperation(value = "用户登录",notes = "用户登录",httpMethod = "POST")
     @PostMapping("/login")
-    public  JSONResult login(@RequestBody UserBO userBO) throws Exception {
+    public  JSONResult login(@RequestBody UserBO userBO, HttpServletRequest request , HttpServletResponse response) throws Exception {
         String username = userBO.getUsername();
         String password = userBO.getPassword();
         if (StringUtils.isBlank(username)||StringUtils.isBlank(password)){
@@ -77,8 +84,20 @@ public class PassPortController {
         if (users==null){
             return JSONResult.errorMsg("用户名或密码不正确");
         }
+        users=setNullProperty(users);
+        CookieUtils.setCookie(request,response,"user", JsonUtils.objectToJson(users),true);
         return JSONResult.ok(users);
 
+    }
+
+    private Users setNullProperty(Users users){
+        users.setPassword(null);
+        users.setMobile(null);
+        users.setEmail(null);
+        users.setCreatedTime(null);
+        users.setUpdatedTime(null);
+        users.setBirthday(null);
+        return users;
     }
 
 
