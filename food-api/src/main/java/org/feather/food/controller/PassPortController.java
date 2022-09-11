@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.feather.food.bo.UserBO;
 import org.feather.food.common.utils.JSONResult;
+import org.feather.food.common.utils.MD5Utils;
 import org.feather.food.pojo.Users;
 import org.feather.food.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,21 @@ public class PassPortController {
         }
         Users user = userService.createUser(userBO);
         return JSONResult.ok(user);
+
+    }
+    @ApiOperation(value = "用户登录",notes = "用户登录",httpMethod = "POST")
+    @PostMapping("/login")
+    public  JSONResult login(@RequestBody UserBO userBO) throws Exception {
+        String username = userBO.getUsername();
+        String password = userBO.getPassword();
+        if (StringUtils.isBlank(username)||StringUtils.isBlank(password)){
+            return JSONResult.errorMsg("用户名或密码不能为空");
+        }
+        Users users = userService.queryForLogin(username, MD5Utils.getMD5Str(password));
+        if (users==null){
+            return JSONResult.errorMsg("用户名或密码不正确");
+        }
+        return JSONResult.ok(users);
 
     }
 
