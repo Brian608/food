@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.feather.food.mapper.CategoryMapperCustom" >
+
+  <resultMap id="myCategoryVO"  type="org.feather.food.vo.CategoryVO">
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name"  />
+    <result column="type" property="type"  />
+    <result column="fatherId" property="fatherId"  />
+    <collection property="subCatList" ofType="org.feather.food.vo.SubCategoryVO">
+      <id column="subId" property="subId" jdbcType="INTEGER" />
+      <result column="subName" property="subName"  />
+      <result column="subType" property="subType"  />
+      <result column="subFatherId" property="subFatherId"  />
+    </collection>
+  </resultMap>
+
+
+  <select id="getSubCatList" resultType="java.util.List"  resultMap="myCategoryVO" parameterType="int">
+    SELECT
+      f.id AS id,
+      f.`name` AS `name`,
+      f.type AS type,
+      f.father_id AS featherId,
+      c.id AS subId,
+      c.NAME AS subName,
+      c.type AS subType,
+      c.father_id AS subFatherId
+    FROM
+      category f
+        LEFT JOIN category c ON f.id = c.father_id
+    WHERE
+      f.father_id = #{rootCatId}
+  </select>
+</mapper>
