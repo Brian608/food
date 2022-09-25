@@ -2,6 +2,7 @@ package org.feather.food.service;
 
 import org.feather.food.pojo.Category;
 import org.feather.food.vo.CategoryVO;
+import org.feather.food.vo.NewItemsVO;
 
 import java.util.List;
 
@@ -27,5 +28,14 @@ public interface CategoryService {
      * @return
      */
    List<CategoryVO> getSubCatList(Integer rootCatId);
+
+    /**
+     * 查询首页每个一级分类下的六条最新商品数据
+     * @param rootCatId
+     * @return
+     */
+
+   List<NewItemsVO> getSixNewItemsLazy(Integer rootCatId);
+
 
 }

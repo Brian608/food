@@ -10,6 +10,7 @@ import org.feather.food.pojo.Category;
 import org.feather.food.service.CarouselService;
 import org.feather.food.service.CategoryService;
 import org.feather.food.vo.CategoryVO;
+import org.feather.food.vo.NewItemsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,6 +66,18 @@ public class IndexController {
         }
         List<CategoryVO> subCatList = categoryService.getSubCatList(rootCatId);
         return JSONResult.ok(subCatList);
+    }
+
+    @ApiOperation(value = "查询每个一级分类下的最新六条分类数据",notes = "查询每个一级分类下的最新六条分类数据",httpMethod = "GET")
+    @GetMapping("/sixNewItems/{rootCatId}")
+    public JSONResult sixNewItems(
+            @ApiParam(name = "rootCatId",value = "一级分类id",required = true)
+            @PathVariable Integer  rootCatId){
+        if (rootCatId==null){
+            return  JSONResult.errorMsg("分类不存在");
+        }
+        List<NewItemsVO> sixNewItemsLazy = categoryService.getSixNewItemsLazy(rootCatId);
+        return JSONResult.ok(sixNewItemsLazy);
     }
 
 

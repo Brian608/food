@@ -1,18 +1,20 @@
 package org.feather.food.service.impl;
 
-import com.sun.scenario.effect.impl.prism.PrImage;
 import org.feather.food.mapper.CategoryMapper;
 import org.feather.food.mapper.CategoryMapperCustom;
 import org.feather.food.pojo.Category;
 import org.feather.food.service.CategoryService;
 import org.feather.food.vo.CategoryVO;
+import org.feather.food.vo.NewItemsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @projectName: food
@@ -46,4 +48,13 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryVO> getSubCatList(Integer rootCatId) {
         return categoryMapperCustom.getSubCatList(rootCatId);
     }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<NewItemsVO> getSixNewItemsLazy(Integer rootCatId) {
+        Map<String, Object> map=new HashMap<>();
+        map.put("rootCatId",rootCatId);
+        return categoryMapperCustom.getSixNewItemsLazy(map);
+    }
+
 }
