@@ -1,9 +1,12 @@
 package org.feather.food.service;
 
+import org.feather.food.common.utils.PagedGridResult;
 import org.feather.food.pojo.Items;
 import org.feather.food.pojo.ItemsImg;
 import org.feather.food.pojo.ItemsParam;
 import org.feather.food.pojo.ItemsSpec;
+import org.feather.food.vo.CommentLevelCountsVO;
+import org.feather.food.vo.ItemCommentVO;
 
 import java.util.List;
 
@@ -45,4 +48,19 @@ public interface ItemService {
      */
     ItemsParam queryItemParam(String itemId);
 
+    /**
+     * 查询商品评价等级
+     * @param itemId
+     * @return
+     */
+     CommentLevelCountsVO  queryCommentCounts(String itemId);
+
+
+    /**
+     * 根据商品ID查询商品的评价
+     * @param itemId
+     * @param level
+     * @return
+     */
+    PagedGridResult queryItemComments(String itemId, Integer level, Integer page, Integer pageSize);
 }
