@@ -10,6 +10,7 @@ import org.feather.food.pojo.*;
 import org.feather.food.service.ItemService;
 import org.feather.food.vo.CommentLevelCountsVO;
 import org.feather.food.vo.ItemCommentVO;
+import org.feather.food.vo.SearchItemsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -124,6 +125,28 @@ public class ItemServiceImpl implements ItemService {
             itemCommentVO.setNickname(DesensitizationUtil.commonDisplay(itemCommentVO.getNickname()));
         }
         return  setterPagedGrid(itemCommentVOList,page);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searchItems(String keywords, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map=new HashMap<>();
+        map.put("keywords",keywords);
+        map.put("sort",sort);
+        PageHelper.startPage(page,pageSize);
+        List<SearchItemsVO> searchItemsVOS = itemsMapperCustom.searchItems(map);
+        return setterPagedGrid(searchItemsVOS,page);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult searchItemsByThirdCat(Integer catId, String sort, Integer page, Integer pageSize) {
+        Map<String, Object> map=new HashMap<>();
+        map.put("catId",catId);
+        map.put("sort",sort);
+        PageHelper.startPage(page,pageSize);
+        List<SearchItemsVO> searchItemsVOS = itemsMapperCustom.searchItemsByThirdCat(map);
+        return setterPagedGrid(searchItemsVOS,page);
     }
 
     private PagedGridResult setterPagedGrid(List<?> list,Integer page){

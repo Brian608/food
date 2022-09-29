@@ -1,5 +1,6 @@
 package org.feather.food.service;
 
+import io.swagger.models.auth.In;
 import org.feather.food.common.utils.PagedGridResult;
 import org.feather.food.pojo.Items;
 import org.feather.food.pojo.ItemsImg;
@@ -63,4 +64,25 @@ public interface ItemService {
      * @return
      */
     PagedGridResult queryItemComments(String itemId, Integer level, Integer page, Integer pageSize);
+
+    /**
+     * 搜索商品列表
+     * @param keywords
+     * @param sort
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PagedGridResult searchItems(String keywords, String sort, Integer page, Integer pageSize);
+
+
+    /**
+     * 根据分类ID搜索商品列表
+     * @param catId
+     * @param sort
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    PagedGridResult searchItemsByThirdCat(Integer catId, String sort, Integer page, Integer pageSize);
 }
