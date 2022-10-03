@@ -101,4 +101,26 @@
             </otherwise>
         </choose>
     </select>
+
+
+    <select id="queryItemsBySpecIds" parameterType="List" resultType="org.feather.food.vo.ShopCartVO">
+        SELECT
+            t.id AS itemId,
+            t.item_name AS itemName,
+            m.url AS itemImgUrl,
+            s.id AS specId,
+            s.name AS specName,
+            s.price_discount AS priceDisCount,
+            s.price_normal AS priceNormal
+        FROM
+            items_spec s
+                LEFT JOIN items t ON t.id = s.item_id
+                LEFT JOIN items_img m ON m.item_id = t.id
+        WHERE
+            m.is_main = 1
+          AND s.id IN
+    <foreach collection="paramsList" index="index" item="specId" open="("  separator="," close=")">
+        #{specId}
+    </foreach>
+    </select>
 </mapper>

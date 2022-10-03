@@ -6,6 +6,7 @@ import org.feather.food.my.mapper.MyMapper;
 import org.feather.food.pojo.Items;
 import org.feather.food.vo.ItemCommentVO;
 import org.feather.food.vo.SearchItemsVO;
+import org.feather.food.vo.ShopCartVO;
 
 import java.util.List;
 import java.util.Map;
@@ -20,5 +21,7 @@ public interface ItemsMapperCustom  {
 
 
     List<SearchItemsVO> searchItemsByThirdCat(@Param("paramsMap")Map<String, Object> map);
+
+    List<ShopCartVO>  queryItemsBySpecIds (@Param("paramsList")List specIdsList);
 
 }

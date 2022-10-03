@@ -11,12 +11,14 @@ import org.feather.food.service.ItemService;
 import org.feather.food.vo.CommentLevelCountsVO;
 import org.feather.food.vo.ItemCommentVO;
 import org.feather.food.vo.SearchItemsVO;
+import org.feather.food.vo.ShopCartVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,8 +150,14 @@ public class ItemServiceImpl implements ItemService {
         List<SearchItemsVO> searchItemsVOS = itemsMapperCustom.searchItemsByThirdCat(map);
         return setterPagedGrid(searchItemsVOS,page);
     }
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<ShopCartVO> queryItemsBySpecIds(String specIds) {
+        List<String> specIdsList = Arrays.asList(specIds.split(","));
+       return itemsMapperCustom.queryItemsBySpecIds(specIdsList);
+    }
 
-    private PagedGridResult setterPagedGrid(List<?> list,Integer page){
+    private PagedGridResult setterPagedGrid(List<?> list, Integer page){
         PageInfo<?> pageList=new PageInfo<>(list);
         PagedGridResult pagedGridResult=new PagedGridResult();
         pagedGridResult.setPage(page);

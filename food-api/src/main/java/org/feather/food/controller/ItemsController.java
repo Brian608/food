@@ -3,7 +3,6 @@ package org.feather.food.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.feather.food.ItemInfoVO;
 import org.feather.food.common.utils.JSONResult;
@@ -122,4 +121,15 @@ public class ItemsController  extends  BaseController{
         return  JSONResult.ok(pagedGridResult);
 
     }
+
+    @ApiOperation(value = " 根据规则ID查询最新的购物车中商品的数据（用于刷新渲染购物车中的商品数据）",notes = " 根据规则ID查询最新的购物车中商品的数据（用于刷新渲染购物车中的商品数据）",httpMethod = "GET")
+    @GetMapping("/refresh")
+    public JSONResult refresh(@ApiParam(name = "itemsSpecIds",value = "拼接的规则ids",required = true,example = "1003,1005") @RequestParam String itemsSpecIds){
+     if (StringUtils.isBlank(itemsSpecIds)){
+         return JSONResult.ok();
+     }
+        return  JSONResult.ok(itemService.queryItemsBySpecIds(itemsSpecIds));
+
+    }
+
 }
