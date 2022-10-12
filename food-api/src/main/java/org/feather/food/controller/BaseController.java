@@ -13,5 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class BaseController {
+
+    private static  final String FOODIE_SHOPCART="shopcart";
+
     public static  final Integer PAGE_SIZE=10;
 }

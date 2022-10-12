@@ -3,6 +3,7 @@ package org.feather.food.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.feather.food.common.enums.CommentLevelEnum;
+import org.feather.food.common.enums.YesOrNoEnum;
 import org.feather.food.common.utils.DesensitizationUtil;
 import org.feather.food.common.utils.PagedGridResult;
 import org.feather.food.mapper.*;
@@ -155,6 +156,34 @@ public class ItemServiceImpl implements ItemService {
     public List<ShopCartVO> queryItemsBySpecIds(String specIds) {
         List<String> specIdsList = Arrays.asList(specIds.split(","));
        return itemsMapperCustom.queryItemsBySpecIds(specIdsList);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public ItemsSpec queryItemSpecById(String specId) {
+        return itemsSpecMapper.selectByPrimaryKey(specId);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public String queryItemMainImgById(String itemId) {
+        ItemsImg itemsImg=new ItemsImg();
+        itemsImg.setItemId(itemId);
+        itemsImg.setIsMain(YesOrNoEnum.YES.getType());
+        ItemsImg selectOne = itemsImgMapper.selectOne(itemsImg);
+        return selectOne!=null?selectOne.getUrl():"";
+    }
+
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void decreaseItemSpecStock(String specId, int buyCounts) {
+        int result = itemsMapperCustom.decreaseItemSpecStock(specId, buyCounts);
+        if (result!=1){
+            throw  new RuntimeException("订单创建失败  原因 库存不足");
+        }
+
+
     }
 
     private PagedGridResult setterPagedGrid(List<?> list, Integer page){
