@@ -10,6 +10,8 @@ import org.feather.food.pojo.*;
 import org.feather.food.service.AddressService;
 import org.feather.food.service.ItemService;
 import org.feather.food.service.OrderService;
+import org.feather.food.vo.MerchantOrdersVO;
+import org.feather.food.vo.OrderVO;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,7 +52,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     @Override
-    public String createOrder(SubmitOrderBO submitOrderBO) {
+    public OrderVO createOrder(SubmitOrderBO submitOrderBO) {
         String userId = submitOrderBO.getUserId();
         String addressId = submitOrderBO.getAddressId();
         String itemSpecIds = submitOrderBO.getItemSpecIds();
@@ -118,6 +120,27 @@ public class OrderServiceImpl implements OrderService {
         waiPayOrderStatus.setOrderStatus(OrderStatusEnum.WAIT_PAY.type);
         waiPayOrderStatus.setCreatedTime(new Date());
         orderStatusMapper.insert(waiPayOrderStatus);
-        return  orderId;
+
+        //构建商户订单  用于传给支付中心
+        MerchantOrdersVO merchantOrdersVO=new MerchantOrdersVO();
+        merchantOrdersVO.setMerchantOrderId(orderId);
+        merchantOrdersVO.setMerchantUserId(userId);
+        merchantOrdersVO.setAmount(realPayAount+postAmount);
+        merchantOrdersVO.setPayMethod(payMethod);
+        //构建自定义订单vo
+        OrderVO orderVO=new OrderVO();
+        orderVO.setOrderId(orderId);
+        orderVO.setMerchantOrdersVO(merchantOrdersVO);
+        return  orderVO;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    @Override
+    public void updateOrderStatus(String orderId, Integer orderStatus) {
+        OrderStatus paidStatus=new OrderStatus();
+        paidStatus.setOrderId(orderId);
+        paidStatus.setOrderStatus(orderStatus);
+        paidStatus.setPayTime(new Date());
+        orderStatusMapper.updateByPrimaryKey(paidStatus);
     }
 }

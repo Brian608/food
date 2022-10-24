@@ -1,6 +1,7 @@
 package org.feather.food.service;
 
 import org.feather.food.bo.SubmitOrderBO;
+import org.feather.food.vo.OrderVO;
 
 /**
  * @projectName: food
@@ -13,6 +14,13 @@ import org.feather.food.bo.SubmitOrderBO;
  */
 public interface OrderService {
 
-    String createOrder(SubmitOrderBO submitOrderBO);
+    OrderVO createOrder(SubmitOrderBO submitOrderBO);
+
+    /**
+     * 修改订单状态
+     * @param orderId
+     * @param orderStatus
+     */
+    void updateOrderStatus(String orderId,Integer orderStatus);
 
 }
