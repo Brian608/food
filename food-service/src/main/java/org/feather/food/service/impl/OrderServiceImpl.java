@@ -3,6 +3,7 @@ package org.feather.food.service.impl;
 import org.feather.food.bo.SubmitOrderBO;
 import org.feather.food.common.enums.OrderStatusEnum;
 import org.feather.food.common.enums.YesOrNoEnum;
+import org.feather.food.common.utils.DateUtil;
 import org.feather.food.mapper.OrderItemsMapper;
 import org.feather.food.mapper.OrderStatusMapper;
 import org.feather.food.mapper.OrdersMapper;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @projectName: food
@@ -142,5 +144,40 @@ public class OrderServiceImpl implements OrderService {
         paidStatus.setOrderStatus(orderStatus);
         paidStatus.setPayTime(new Date());
         orderStatusMapper.updateByPrimaryKey(paidStatus);
+    }
+
+    @Override
+    public OrderStatus queryOrderStatusInfo(String orderId) {
+        return orderStatusMapper.selectByPrimaryKey(orderId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    @Override
+    public void closeOrder() {
+        //查询未付款订单，判断时间是否超时(1天） ，超时则关闭交易
+        OrderStatus orderStatus=new OrderStatus();
+        orderStatus.setOrderStatus(OrderStatusEnum.WAIT_PAY.type);
+        List<OrderStatus> list = orderStatusMapper.select(orderStatus);
+        if (!list.isEmpty()){
+            for (OrderStatus os : list) {
+                //获得订单创建时间
+                Date createdTime = os.getCreatedTime();
+                int daysBetween = DateUtil.daysBetween(createdTime, new Date());
+                if (daysBetween>=1){
+                    //超过一天，关闭订单
+                    doCloseOrder(os.getOrderId());
+                }
+            }
+        }
+
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    void  doCloseOrder(String orderId){
+        OrderStatus close=new OrderStatus();
+        close.setOrderStatus(OrderStatusEnum.CLOSE.type);
+        close.setOrderId(orderId);
+        close.setCloseTime(new Date());
+        orderStatusMapper.updateByPrimaryKey(close);
     }
 }

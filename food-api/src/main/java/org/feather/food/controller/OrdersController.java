@@ -6,6 +6,7 @@ import org.feather.food.bo.SubmitOrderBO;
 import org.feather.food.common.enums.OrderStatusEnum;
 import org.feather.food.common.enums.PayMethodEnum;
 import org.feather.food.common.utils.JSONResult;
+import org.feather.food.pojo.OrderStatus;
 import org.feather.food.service.OrderService;
 import org.feather.food.vo.MerchantOrdersVO;
 import org.feather.food.vo.OrderVO;
@@ -77,5 +78,11 @@ public class OrdersController extends BaseController {
     public Integer   notifyMerchantOrderPaid(String merchantOrderId){
         orderService.updateOrderStatus(merchantOrderId, OrderStatusEnum.WAIT_PAY.type);
         return HttpStatus.OK.value();
+    }
+
+    @PostMapping("/getPaidOrderInfo")
+    public JSONResult   getPaidOrderInfo(String orderId){
+        OrderStatus orderStatus = orderService.queryOrderStatusInfo(orderId);
+        return JSONResult.ok(orderStatus);
     }
 }
