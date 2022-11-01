@@ -53,4 +53,15 @@ public class CenterUserServiceImpl implements CenterUserService {
         usersMapper.updateByPrimaryKey(updateUsers);
         return queryUserInfo(userId);
     }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public Users updateUserFace(String userId, String faceUrl) {
+        Users updateUsers=new Users();
+        updateUsers.setId(userId);
+        updateUsers.setUpdatedTime(new Date());
+        updateUsers.setFace(faceUrl);
+        usersMapper.updateByPrimaryKey(updateUsers);
+        return queryUserInfo(userId);
+    }
 }

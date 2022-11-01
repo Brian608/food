@@ -3,6 +3,8 @@ package org.feather.food.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+
 /**
  * @projectName: food
  * @package: org.feather.food.controller
@@ -27,4 +29,13 @@ public class BaseController {
      * 支付中心地址
      */
    public static final String paymentUrl="http://ssssssxxxxxxx";
+
+    /**
+     * 用户头像保存的地址
+     */
+
+  // public static  final String IMAGE_USER_FACE_LOCATION="D:\\dev\\files\\images\\food-dev\\faces";
+
+    public static  final String IMAGE_USER_FACE_LOCATION="D:"+ File.separator+"dev"+File.separator+"files"+File.separator+"images"+
+            File.separator+"food-dev"+File.separator+"faces";
 }
