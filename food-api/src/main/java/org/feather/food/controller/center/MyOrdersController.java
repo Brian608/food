@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.feather.food.common.utils.JSONResult;
 import org.feather.food.common.utils.PagedGridResult;
 import org.feather.food.controller.BaseController;
-import org.feather.food.pojo.Orders;
 import org.feather.food.service.center.MyOrdersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -91,17 +90,6 @@ public class MyOrdersController  extends BaseController {
             return JSONResult.errorMsg("订单确认收货失败！");
         }
 
-        return JSONResult.ok();
-    }
-    /**
-     * 用于验证用户和订单是否有关联关系，避免非法用户调用
-     * @return
-     */
-    private JSONResult checkUserOrder(String userId, String orderId) {
-        Orders order = myOrdersService.queryMyOrder(userId, orderId);
-        if (order == null) {
-            return JSONResult.errorMsg("订单不存在！");
-        }
         return JSONResult.ok();
     }
 

@@ -11,6 +11,7 @@ import org.feather.food.mapper.OrdersMapper;
 import org.feather.food.pojo.OrderStatus;
 import org.feather.food.pojo.Orders;
 import org.feather.food.service.center.MyOrdersService;
+import org.feather.food.service.impl.BaseService;
 import org.feather.food.vo.MyOrdersVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,7 @@ import java.util.Map;
  * @version: 1.0
  */
 @Service
-public class MyOrdersServiceImpl implements MyOrdersService {
+public class MyOrdersServiceImpl extends BaseService implements MyOrdersService  {
 
 
     @Autowired
@@ -83,15 +84,6 @@ public class MyOrdersServiceImpl implements MyOrdersService {
         orderStatusMapper.updateByExampleSelective(updateOrder, example);
     }
 
-    private PagedGridResult setterPagedGrid(List<?> list, Integer page) {
-        PageInfo<?> pageList = new PageInfo<>(list);
-        PagedGridResult grid = new PagedGridResult();
-        grid.setPage(page);
-        grid.setRows(list);
-        grid.setTotal(pageList.getPages());
-        grid.setRecords(pageList.getTotal());
-        return grid;
-    }
 
     @Transactional(propagation=Propagation.SUPPORTS)
     @Override
