@@ -77,7 +77,7 @@ public class ItemsController  extends  BaseController{
             page=1;
         }
         if (pageSize==null){
-         pageSize=PAGE_SIZE;
+         pageSize=COMMON_PAGE_SIZE;
         }
         PagedGridResult pagedGridResult = itemService.queryItemComments(itemId, level, page, pageSize);
         return  JSONResult.ok(pagedGridResult);
@@ -95,7 +95,7 @@ public class ItemsController  extends  BaseController{
             page=1;
         }
         if (pageSize==null){
-            pageSize=PAGE_SIZE;
+            pageSize=COMMON_PAGE_SIZE;
         }
         PagedGridResult pagedGridResult = itemService.searchItems(keywords,sort,page,pageSize);
         return  JSONResult.ok(pagedGridResult);
@@ -115,7 +115,7 @@ public class ItemsController  extends  BaseController{
             page=1;
         }
         if (pageSize==null){
-            pageSize=PAGE_SIZE;
+            pageSize=COMMON_PAGE_SIZE;
         }
         PagedGridResult pagedGridResult = itemService.searchItemsByThirdCat(catId,sort,page,pageSize);
         return  JSONResult.ok(pagedGridResult);
