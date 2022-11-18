@@ -2,6 +2,7 @@ package org.feather.food.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.feather.food.pojo.OrderStatus;
 import org.feather.food.vo.MyOrdersVO;
 
 import java.util.List;
@@ -25,5 +26,11 @@ public interface OrdersCustom {
      * @return
      */
      List<MyOrdersVO> queryMyOrders(@Param("paramsMap") Map<String,Object> map);
+
+
+     int getMyOrderStatusCounts(@Param("paramsMap") Map<String,Object> map);
+
+
+    List<OrderStatus> getMyOrderTrend(@Param("paramsMap") Map<String, Object> map);
 
 }

@@ -13,6 +13,7 @@ import org.feather.food.pojo.Orders;
 import org.feather.food.service.center.MyOrdersService;
 import org.feather.food.service.impl.BaseService;
 import org.feather.food.vo.MyOrdersVO;
+import org.feather.food.vo.OrderStatusCountsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -131,5 +132,42 @@ public class MyOrdersServiceImpl extends BaseService implements MyOrdersService 
         int result = ordersMapper.updateByExampleSelective(updateOrder, example);
 
         return result == 1 ;
+    }
+    @Transactional(propagation=Propagation.SUPPORTS)
+    @Override
+    public OrderStatusCountsVO getOrderStatusCounts(String userId) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+
+        map.put("orderStatus", OrderStatusEnum.WAIT_PAY.type);
+        int waitPayCounts = ordersCustom.getMyOrderStatusCounts(map);
+
+        map.put("orderStatus", OrderStatusEnum.WAIT_DELIVER.type);
+        int waitDeliverCounts = ordersCustom.getMyOrderStatusCounts(map);
+
+        map.put("orderStatus", OrderStatusEnum.WAIT_RECEIVE.type);
+        int waitReceiveCounts = ordersCustom.getMyOrderStatusCounts(map);
+
+        map.put("orderStatus", OrderStatusEnum.SUCCESS.type);
+        map.put("isComment", YesOrNoEnum.NO.getType());
+        int waitCommentCounts = ordersCustom.getMyOrderStatusCounts(map);
+
+        return  new OrderStatusCountsVO(waitPayCounts,
+                waitDeliverCounts,
+                waitReceiveCounts,
+                waitCommentCounts);
+    }
+    @Transactional(propagation=Propagation.SUPPORTS)
+    @Override
+    public PagedGridResult getOrdersTrend(String userId, Integer page, Integer pageSize) {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+
+        PageHelper.startPage(page, pageSize);
+        List<OrderStatus> list = ordersCustom.getMyOrderTrend(map);
+
+        return setterPagedGrid(list, page);
     }
 }
