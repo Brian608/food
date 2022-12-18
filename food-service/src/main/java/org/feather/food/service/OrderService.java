@@ -1,8 +1,11 @@
 package org.feather.food.service;
 
+import org.feather.food.bo.ShopCartBO;
 import org.feather.food.bo.SubmitOrderBO;
 import org.feather.food.pojo.OrderStatus;
 import org.feather.food.vo.OrderVO;
+
+import java.util.List;
 
 /**
  * @projectName: food
@@ -15,7 +18,7 @@ import org.feather.food.vo.OrderVO;
  */
 public interface OrderService {
 
-    OrderVO createOrder(SubmitOrderBO submitOrderBO);
+    OrderVO createOrder(List<ShopCartBO> shopCartBOList,SubmitOrderBO submitOrderBO);
 
     /**
      * 修改订单状态

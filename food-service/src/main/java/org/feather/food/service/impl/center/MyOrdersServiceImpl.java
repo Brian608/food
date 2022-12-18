@@ -65,7 +65,6 @@ public class MyOrdersServiceImpl extends BaseService implements MyOrdersService 
         PageHelper.startPage(page, pageSize);
 
         List<MyOrdersVO> list = ordersCustom.queryMyOrders(map);
-
         return setterPagedGrid(list, page);
     }
 

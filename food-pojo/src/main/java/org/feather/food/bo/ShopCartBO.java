@@ -11,18 +11,12 @@ package org.feather.food.bo;
  */
 public class ShopCartBO {
     private String itemId;
-
     private String itemImgUrl;
-
     private String itemName;
-
-
+    private String specId;
     private String specName;
-
     private Integer buyCounts;
-
     private String priceDiscount;
-
     private String priceNormal;
 
     public String getItemId() {
@@ -47,6 +41,14 @@ public class ShopCartBO {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getSpecId() {
+        return specId;
+    }
+
+    public void setSpecId(String specId) {
+        this.specId = specId;
     }
 
     public String getSpecName() {
@@ -83,10 +85,11 @@ public class ShopCartBO {
 
     @Override
     public String toString() {
-        return "ShopCartBO{" +
+        return "ShopcartVO{" +
                 "itemId='" + itemId + '\'' +
                 ", itemImgUrl='" + itemImgUrl + '\'' +
                 ", itemName='" + itemName + '\'' +
+                ", specId='" + specId + '\'' +
                 ", specName='" + specName + '\'' +
                 ", buyCounts=" + buyCounts +
                 ", priceDiscount='" + priceDiscount + '\'' +

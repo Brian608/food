@@ -3,8 +3,11 @@ package org.feather.food.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.feather.food.common.enums.YesOrNoEnum;
 import org.feather.food.common.utils.JSONResult;
+import org.feather.food.common.utils.JsonUtils;
+import org.feather.food.common.utils.RedisOperator;
 import org.feather.food.pojo.Carousel;
 import org.feather.food.pojo.Category;
 import org.feather.food.service.CarouselService;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,12 +42,29 @@ public class IndexController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private RedisOperator redisOperator;
+
     @ApiOperation(value = "获取首页轮播图列表",notes = "获取首页轮播图列表",httpMethod = "GET")
     @GetMapping("/carousel")
     public JSONResult carousel(){
-        List<Carousel> carousels = carouselService.queryAll(YesOrNoEnum.YES.getType());
+        String carouselStr = redisOperator.get("carousel");
+        List<Carousel> carousels;
+        if (StringUtils.isBlank(carouselStr)){
+            carousels   = carouselService.queryAll(YesOrNoEnum.YES.getType());
+            redisOperator.set("carousel", JsonUtils.objectToJson(carousels));
+        }else {
+            carousels=JsonUtils.jsonToList(carouselStr,Carousel.class);
+        }
+
         return JSONResult.ok(carousels);
     }
+    /**
+     * 1.后台运营系统，一旦广告（轮播图）发生更改，就可以删除缓存，然后重置
+     * 2.定时重置，比如每天凌晨三点
+     * 3.每个轮播图都有可能是一个广告，每个广告都会有一个过期时间，过期了，再重置
+     */
+
     /**
      * 首页分类展示需求
      * 1。第一次刷新主页查询大分类，渲染展示到首页
@@ -52,7 +73,15 @@ public class IndexController {
     @ApiOperation(value = "获取商品分类（一级）",notes = "获取商品分类（一级）",httpMethod = "GET")
     @GetMapping("/cats")
     public JSONResult cats(){
-        List<Category> categoryList = categoryService.queryAllRootLevelCat();
+        List<Category> categoryList;
+        String catsStr = redisOperator.get("cats");
+        if (StringUtils.isBlank(catsStr)){
+            categoryList=categoryService.queryAllRootLevelCat();
+            redisOperator.set("cats",JsonUtils.objectToJson(categoryList));
+        }else {
+            categoryList=JsonUtils.jsonToList(catsStr,Category.class);
+        }
+
         return JSONResult.ok(categoryList);
     }
 
@@ -64,7 +93,14 @@ public class IndexController {
         if (rootCatId==null){
             return  JSONResult.errorMsg("分类不存在");
         }
-        List<CategoryVO> subCatList = categoryService.getSubCatList(rootCatId);
+        List<CategoryVO> subCatList;
+        String catsStr = redisOperator.get("subCat:" + rootCatId);
+        if (StringUtils.isBlank(catsStr)){
+            subCatList = categoryService.getSubCatList(rootCatId);
+            redisOperator.set("subCat:" + rootCatId,JsonUtils.objectToJson(subCatList));
+        }else {
+            subCatList=JsonUtils.jsonToList(catsStr,CategoryVO.class);
+        }
         return JSONResult.ok(subCatList);
     }
 

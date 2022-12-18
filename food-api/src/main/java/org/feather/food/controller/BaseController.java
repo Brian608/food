@@ -24,7 +24,7 @@ public class BaseController {
     @Autowired
     public MyOrdersService myOrdersService;
 
-    private static  final String FOODIE_SHOPCART="shopcart";
+    public static  final String FOODIE_SHOPCART="shopcart";
 
     public static  final Integer COMMON_PAGE_SIZE=10;
 

@@ -1,5 +1,9 @@
 package org.feather.food.vo;
 
+import org.feather.food.bo.ShopCartBO;
+
+import java.util.List;
+
 /**
  * @projectName: food
  * @package: org.feather.food.vo
@@ -13,6 +17,8 @@ public class OrderVO {
 
     private String orderId;
     private MerchantOrdersVO merchantOrdersVO;
+
+    private List<ShopCartBO> toBeRemovedShopCatList;
 
     public String getOrderId() {
         return orderId;
@@ -30,4 +36,11 @@ public class OrderVO {
         this.merchantOrdersVO = merchantOrdersVO;
     }
 
+    public List<ShopCartBO> getToBeRemovedShopcatList() {
+        return toBeRemovedShopCatList;
+    }
+
+    public void setToBeRemovedShopcatList(List<ShopCartBO> toBeRemovedShopCatList) {
+        this.toBeRemovedShopCatList = toBeRemovedShopCatList;
+    }
 }
