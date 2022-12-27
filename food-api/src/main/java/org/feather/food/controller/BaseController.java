@@ -1,13 +1,18 @@
 package org.feather.food.controller;
 
 import org.feather.food.common.utils.JSONResult;
+import org.feather.food.common.utils.RedisOperator;
 import org.feather.food.pojo.Orders;
+import org.feather.food.pojo.Users;
 import org.feather.food.service.center.MyOrdersService;
+import org.feather.food.vo.UsersVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
+import java.util.UUID;
 
 /**
  * @projectName: food
@@ -24,9 +29,14 @@ public class BaseController {
     @Autowired
     public MyOrdersService myOrdersService;
 
+    @Autowired
+    private RedisOperator redisOperator;
+
     public static  final String FOODIE_SHOPCART="shopcart";
 
     public static  final Integer COMMON_PAGE_SIZE=10;
+
+    public static  final String  REDIS_USER_TOKEN="redis_user_token";
 
     //微信支付成功--》支付中心-----》天天吃货平台
     //                  回调通知的url
@@ -57,5 +67,17 @@ public class BaseController {
             return JSONResult.errorMsg("订单不存在！");
         }
         return JSONResult.ok();
+    }
+
+    public UsersVO conventUsersVO(Users user) {
+        // 实现用户的redis会话
+        String uniqueToken = UUID.randomUUID().toString().trim();
+        redisOperator.set(REDIS_USER_TOKEN + ":" + user.getId(),
+                uniqueToken);
+
+        UsersVO usersVO = new UsersVO();
+        BeanUtils.copyProperties(user, usersVO);
+        usersVO.setUserUniqueToken(uniqueToken);
+        return usersVO;
     }
 }

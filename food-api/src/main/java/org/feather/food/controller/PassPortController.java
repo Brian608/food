@@ -8,6 +8,7 @@ import org.feather.food.bo.UserBO;
 import org.feather.food.common.utils.*;
 import org.feather.food.pojo.Users;
 import org.feather.food.service.UserService;
+import org.feather.food.vo.UsersVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -70,9 +71,12 @@ public class PassPortController  extends  BaseController{
             return  JSONResult.errorMsg("两次密码不一致");
         }
         Users user = userService.createUser(userBO);
-        user=setNullProperty(user);
-        CookieUtils.setCookie(request,response,"user", JsonUtils.objectToJson(user),true);
-        //TODO 生成用户token 存入redis绘画
+       // user=setNullProperty(user);
+        // 实现用户的redis会话
+        UsersVO usersVO = conventUsersVO(user);
+
+        CookieUtils.setCookie(request, response, "user",
+                JsonUtils.objectToJson(usersVO), true);
         // 同步购物车数据
         syncShopCartData(user.getId(),request,response);
         return JSONResult.ok(user);
@@ -90,8 +94,12 @@ public class PassPortController  extends  BaseController{
         if (users==null){
             return JSONResult.errorMsg("用户名或密码不正确");
         }
-        users=setNullProperty(users);
-        CookieUtils.setCookie(request,response,"user", JsonUtils.objectToJson(users),true);
+       // users=setNullProperty(users);
+        // 实现用户的redis会话
+        UsersVO usersVO = conventUsersVO(users);
+
+        CookieUtils.setCookie(request, response, "user",
+                JsonUtils.objectToJson(usersVO), true);
         // 同步购物车数据
         syncShopCartData(users.getId(),request,response);
         return JSONResult.ok(users);
@@ -111,9 +119,14 @@ public class PassPortController  extends  BaseController{
     @ApiOperation(value = "退出登录",notes = "退出登录",httpMethod = "POST")
     @PostMapping("/logout")
     public  JSONResult logout(@RequestParam String userId, HttpServletRequest request , HttpServletResponse response){
-      CookieUtils.deleteCookie(request ,response,"user");
-      //todo 用户退出登录，需要清楚购物车
-        //todo 分布式会话中需要清除用户数据
+        // 清除用户的相关信息的cookie
+        CookieUtils.deleteCookie(request, response, "user");
+
+        // 用户退出登录，清除redis中user的会话信息
+        redisOperator.del(REDIS_USER_TOKEN + ":" + userId);
+
+        // 分布式会话中需要清除用户数据
+        CookieUtils.deleteCookie(request, response, FOODIE_SHOPCART);
         return JSONResult.ok();
 
     }

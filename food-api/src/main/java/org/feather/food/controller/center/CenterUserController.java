@@ -14,6 +14,7 @@ import org.feather.food.controller.BaseController;
 import org.feather.food.pojo.Users;
 import org.feather.food.resource.FileUpload;
 import org.feather.food.service.center.CenterUserService;
+import org.feather.food.vo.UsersVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -124,9 +125,12 @@ public class CenterUserController extends BaseController {
                 + "?t=" + DateUtil.getCurrentDateString(DateUtil.DATE_PATTERN);
         //更新用户头像到数据库
         Users users = centerUserService.updateUserFace(userId, finalUserFaceUrl);
-        users = setNullProperty(users);
-        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(users), true);
-        //TODO  后续要改，增加token令牌，会整合redis，分布式会话
+        UsersVO usersVO = conventUsersVO(users);
+
+//        userResult = setNullProperty(userResult);
+        CookieUtils.setCookie(request, response, "user",
+                JsonUtils.objectToJson(usersVO), true);
+
         return JSONResult.ok(users);
     }
 
@@ -142,9 +146,13 @@ public class CenterUserController extends BaseController {
             return JSONResult.errorMap(errorMap);
         }
         Users users = centerUserService.updateUserInfo(userId, centerUserBO);
-        users = setNullProperty(users);
-        CookieUtils.setCookie(request, response, "user", JsonUtils.objectToJson(users), true);
-        //TODO  后续要改，增加token令牌，会整合redis，分布式会话
+        // 增加令牌token，会整合进redis，分布式会话
+        UsersVO usersVO = conventUsersVO(users);
+
+//        userResult = setNullProperty(userResult);
+        CookieUtils.setCookie(request, response, "user",
+                JsonUtils.objectToJson(usersVO), true);
+
         return JSONResult.ok(users);
     }
 
