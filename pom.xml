@@ -13,6 +13,7 @@
         <module>food-mapper</module>
         <module>food-service</module>
         <module>food-api</module>
+        <module>food-sso</module>
     </modules>
 
     <!--

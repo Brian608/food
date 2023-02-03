@@ -1,12 +1,9 @@
 package org.feather.food.controller.interceptor;
 
 import org.apache.commons.lang3.StringUtils;
-import org.feather.food.aspect.ServiceLogAspect;
 import org.feather.food.common.utils.JSONResult;
 import org.feather.food.common.utils.JsonUtils;
 import org.feather.food.common.utils.RedisOperator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

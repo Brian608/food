@@ -1,0 +1,15 @@
+server:
+  port: 8090
+
+spring:
+  datasource:                                           # 数据源的相关配置
+    url: jdbc:mysql://localhost:3306/foodie-shop-dev?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    password: root
+  redis:
+    database: 1
+    host: localhost
+    port: 6379
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
