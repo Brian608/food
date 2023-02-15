@@ -15,6 +15,7 @@
         <module>food-api</module>
         <module>food-sso</module>
         <module>food-search</module>
+        <module>food-fs</module>
     </modules>
 
     <!--

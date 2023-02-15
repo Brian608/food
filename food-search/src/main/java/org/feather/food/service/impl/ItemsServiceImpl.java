@@ -75,7 +75,6 @@ public class ItemsServiceImpl implements ItemsEsService {
         AggregatedPage<Items> pagedItems = esTemplate.queryForPage(query, Items.class, new SearchResultMapper() {
             @Override
             public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
-
                 List<Items> itemHighLightList = new ArrayList<>();
 
                 SearchHits hits = response.getHits();
